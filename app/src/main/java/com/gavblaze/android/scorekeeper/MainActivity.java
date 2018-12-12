@@ -3,6 +3,7 @@ package com.gavblaze.android.scorekeeper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private int mScore2 = 0;
     private TextView mScoreText1;
     private TextView mScoreText2;
+    private static final String SCORE_ONE_KEY = "key_one";
+    private static final String SCORE_TWO_KEY = "key_two";
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,19 @@ public class MainActivity extends AppCompatActivity {
 
         mScoreText1 = findViewById(R.id.score_1);
         mScoreText2 = findViewById(R.id.score_2);
+
+
+        if (savedInstanceState != null) {
+            mScore1 = savedInstanceState.getInt(SCORE_ONE_KEY);
+            Log.i(LOG_TAG, "............onCreate()");
+            Log.i(LOG_TAG, "......retrivedScore: " + mScore1);
+            mScore2 = savedInstanceState.getInt(SCORE_TWO_KEY);
+
+            mScoreText1.setText(String.valueOf(mScore1));
+            mScoreText2.setText(String.valueOf(mScore2));
+        }
+
+
     }
 
     public void increaseScore(View view) {
@@ -87,5 +104,16 @@ public class MainActivity extends AppCompatActivity {
             recreate();
         }
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SCORE_ONE_KEY, mScore1);
+        outState.putInt(SCORE_TWO_KEY, mScore2);
+
+        Log.i(LOG_TAG, "......onSavedInstanceStateCalled()");
+        Log.i(LOG_TAG, "......Score1: " + mScore1);
+        Log.i(LOG_TAG, "......Score2: " + mScore2);
     }
 }
